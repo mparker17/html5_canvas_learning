@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>First javascript program</title>
+    <script type="text/javascript">
+    function draw(){
+      var canvas = document.getElementById('joe');
+      if (canvas.getContext){
+        var pen = canvas.getContext('2d');
+        var x = 10;
+
+        pen.fillStyle = 'rgb(255, 0, 0)';
+        pen.fillArc(100, 100, 100, 0, Math.PI*2, false);
+      }
+    }
+    </script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="draw();">
+    <canvas id="joe" width="640" height="480"></canvas>
+  </body>
+</html>

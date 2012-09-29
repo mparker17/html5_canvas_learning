@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas tutorial</title>
+    <script type="text/javascript">
+    function draw(){
+      var canvas = document.getElementById('tutorial');
+      if (canvas.getContext){
+        var ctx = canvas.getContext('2d');
+
+        // Put your code here
+        var ball = {
+          x: 320,
+          y: 16,
+          vertSpeed: 10,
+          weight: 1.2,
+          radius: 15,
+          color: "orange",
+          falling: true,
+          elasticity: 0.8
+        };
+
+        // Define how to draw
+        function drawBouncingBall() {
+          // If this gets to the bottom or top of the screen, reverse the speed
+          if ((ball.y >= 480 - ball.radius) || (ball.y <= 0 + ball.radius)) {
+              ball.vertSpeed = -(ball.vertSpeed);
+          }
+
+          // Calculate the new position of the ball
+          ball.y = ball.y + ball.vertSpeed;
+
+          // Clear the screen
+          ctx.clearRect(0, 0, 640, 480);
+
+          // Draw the ball
+          ctx.fillStyle = ball.color;
+          ctx.beginPath();
+          ctx.arc(ball.x, ball.y, ball.radius, 0, 2*Math.PI, false);
+          ctx.fill();
+        }
+
+        // Set up
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+
+        // Tell the computer to call the draw function every 50 ms
+        setInterval(drawBouncingBall, 50);
+      }
+    }
+    </script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="draw();">
+    <canvas id="tutorial" width="640" height="480"></canvas>
+  </body>
+</html>

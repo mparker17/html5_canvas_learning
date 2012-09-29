@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas tutorial</title>
+    <script type="text/javascript">
+        // Create a point object
+        function Point(newX, newY) {
+          this.x = newX;
+          this.y = newY;
+        };
+        Point.prototype.getX = function() {
+          return this.x;
+        };
+        Point.prototype.getY = function() {
+          return this.y;
+        };
+        Point.prototype.setX = function(newX) {
+          this.x = newX;
+        };
+        Point.prototype.setY = function(newY) {
+          this.y = newY;
+        };
+
+
+        // Create a vector
+        function Vector(newXSpeed, newYSpeed) {
+          this.xSpeed = newXSpeed;
+          this.ySpeed = newYSpeed;
+        };
+        Vector.prototype.getSpeed = function() {
+          return Math.sqrt(this.xSpeed ^ 2 + this.ySpeed ^ 2);
+        };
+        Vector.prototype.getXSpeed = function() {
+          return this.xSpeed;
+        };
+        Vector.prototype.getYSpeed = function() {
+          return this.ySpeed;
+        };
+        Vector.prototype.setXSpeed = function(newXSpeed) {
+          this.xSpeed = newXSpeed;
+        };
+        Vector.prototype.setYSpeed = function(newYSpeed) {
+          this.ySpeed = newYSpeed;
+        };
+
+
+        // Create a ball object
+        function Ball(newPosition, newSpeed, newRadius) {
+          this.position = newPosition;
+          this.speed = newSpeed;
+          this.radius = newRadius;
+        };
+        Ball.prototype.getPosition = function() {
+          return this.position;
+        };
+        Ball.prototype.setPosition = function(newPosition) {
+          this.position = newPosition;
+        };
+        Ball.prototype.getSpeed = function() {
+          return this.speed;
+        };
+        Ball.prototype.setSpeed = function(newSpeed) {
+          this.speed = newSpeed;
+        };
+        Ball.prototype.recalculatePosition = function() {
+          this.position.setX(this.position.getX() + this.speed.getXSpeed());
+          this.position.setY(this.position.getY() + this.speed.getYSpeed());
+        };
+        Ball.prototype.reverseXSpeed = function() {
+          this.speed.setXSpeed(-this.speed.getXSpeed());
+        };
+        Ball.prototype.reverseYSpeed = function() {
+          this.speed.setYSpeed(-this.speed.getYSpeed());
+        };
+        Ball.prototype.getRadius = function() {
+          return this.radius;
+        };
+        Ball.prototype.setRadius = function(newRadius) {
+          this.radius = newRadius;
+        };
+        Ball.prototype.drawYourself = function(context) {
+          context.beginPath();
+          context.arc(this.position.getX(), this.position.getY(), this.getRadius(), 0, 2*Math.PI, false);
+          context.fill();
+        };
+
+    function draw(){
+      var canvas = document.getElementById('tutorial');
+      if (canvas.getContext){
+        var ctx = canvas.getContext('2d');
+
+        // Create a ball to move around
+        var myBall = new Ball(
+          new Point(16, 16),
+          new Vector(5, 5),
+          15
+        );
+
+        // function to draw myBall
+        function drawBouncingBall() {
+          // Bounce when hitting the top or bottom
+          if ((myBall.getPosition().getY() >= 480 - myBall.getRadius()) || (myBall.getPosition().getY() <= 0 + myBall.getRadius())) {
+              myBall.reverseYSpeed();
+          }
+          // Bounce when hitting the left or right
+          if ((myBall.getPosition().getX() >= 640 - myBall.getRadius()) || (myBall.getPosition().getX() <= 0 + myBall.getRadius())) {
+              myBall.reverseXSpeed();
+          }
+
+          // Calculate the new position of the ball
+          myBall.recalculatePosition();
+
+          // Clear the screen
+          ctx.clearRect(0, 0, 640, 480);
+
+          // Draw the ball
+          ctx.fillStyle = "purple";
+          myBall.drawYourself(ctx);
+        }
+
+        // Set up
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+
+        // Tell the computer to call the draw function every 50 ms
+        setInterval(drawBouncingBall, 50);
+      }
+    };
+    </script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+  </head>
+  <body onload="draw();">
+    <canvas id="tutorial" width="640" height="480"></canvas>
+  </body>
+</html>
